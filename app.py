@@ -10,6 +10,21 @@ app = Flask(__name__)
 
 @app.route('/pdf',methods=['POST'])
 def function():
+    token = request.headers.get('Authorization')
+    if token:
+        try:
+            # Verify and decode the token
+            decoded_token = jwt.decode(token, 'dulan/sahan', algorithms=['HS256'])
+            # Perform additional checks or operations based on the decoded token
+            # ...
+            return 'Authorized'
+        except jwt.ExpiredSignatureError:
+            return 'Token expired', 401
+        except jwt.InvalidTokenError:
+            return 'Invalid token', 401
+
+    return 'Unauthorized', 401
+
     files = request.files.getlist('file')
     openai.api_key = request.form['openai_key']
     if len(files) == 0:
