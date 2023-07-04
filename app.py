@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, Response, send_file
+import jwt
 import PyPDF2
 import re
 import openai
