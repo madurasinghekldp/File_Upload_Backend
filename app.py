@@ -18,13 +18,13 @@ def function():
             decoded_token = jwt.decode(token, 'dulan/sahan', algorithms=['HS256'])
             # Perform additional checks or operations based on the decoded token
             # ...
-            return 'Authorized'
+            #return 'Authorized'
         except jwt.ExpiredSignatureError:
             return 'Token expired', 401
         except jwt.InvalidTokenError:
             return 'Invalid token', 401
 
-    return 'Unauthorized', 401
+    #return 'Unauthorized', 401
 
     files = request.files.getlist('file')
     openai.api_key = request.form['openai_key']
