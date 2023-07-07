@@ -11,7 +11,8 @@ app = Flask(__name__)
 
 @app.route('/pdf',methods=['POST'])
 def function():
-    token = request.headers.get('Authorization').split(" ")[1]
+    token = request.headers.get('Authorization')
+    token = token.split(" ")[1]
     if token:
         try:
             # Verify and decode the token
