@@ -11,14 +11,14 @@ app = Flask(__name__)
 
 @app.route('/pdf',methods=['POST'])
 def function():
-    token = request.headers.get('Authorization')
+    token = request.headers.get('Authorization').split(" ")[1]
     if token:
         try:
             # Verify and decode the token
             decoded_token = jwt.decode(token, 'dulan/sahan', algorithms=['HS256'])
             # Perform additional checks or operations based on the decoded token
             # ...
-            #return 'Authorized'
+            return 'Authorized'
         except jwt.ExpiredSignatureError:
             return 'Token expired', 401
         except jwt.InvalidTokenError:
