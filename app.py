@@ -24,7 +24,7 @@ def function():
         except jwt.InvalidTokenError:
             return 'Invalid token', 401
 
-    #return 'Unauthorized', 401
+    return 'Unauthorized', 401
 
     files = request.files.getlist('file')
     openai.api_key = request.form['openai_key']
