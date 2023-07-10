@@ -26,7 +26,11 @@ def function():
             return 'Invalid token', 401
     
 
-    files = request.files.getlist('file')
+    #files = request.files.getlist('file')
+    files = []
+    for key, value in request.files.items():
+        if 'file' in key:
+            files.append(value)
     openai.api_key = request.form['openai_key']
     if len(files) == 0:
         return 'No file uploaded', 400
