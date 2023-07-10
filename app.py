@@ -9,34 +9,7 @@ import threading
 
 app = Flask(__name__)
 
-@app.route('/pdf',methods=['POST'])
-def function():
-    token = request.headers.get('Authorization')
-    
-    if token:
-        try:
-            # Verify and decode the token
-            decoded_token = jwt.decode(token, 'dulan/sahan', algorithms=['HS256'])
-            # Perform additional checks or operations based on the decoded token
-            # ...
-            #return 'Authorized'
-        except jwt.ExpiredSignatureError:
-            return 'Token expired', 401
-        except jwt.InvalidTokenError:
-            return 'Invalid token', 401
-    
-
-    #files = request.files.getlist('file')
-    files = []
-    for key, value in request.files.items():
-        if 'file' in key:
-            files.append(value)
-    openai.api_key = request.form['openai_key']
-    if len(files) == 0:
-        return 'No file uploaded', 400
-
-
-    def convert_pdf_to_text(files):
+def convert_pdf_to_text(files):
         print("convert_pdf_to_text\n")
         text = ''
         for file in files:
@@ -45,7 +18,7 @@ def function():
                 text += page.extract_text()
         return text
     
-    def preprocess_text(text):
+def preprocess_text(text):
         print("preprocess_text\n")
         # Remove unwanted characters, symbols, or formatting
         text = re.sub(r'\n', ' ', text)  # Remove newlines
@@ -54,24 +27,23 @@ def function():
         # Additional preprocessing steps can be added here
 
         return text
-    
-    def get_sentences(text):
+
+def get_sentences(text):
         print("get_sentences\n")
         # Split text into sentences using regular expressions
         sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', text)
 
         return sentences
-    
-    def combined_paragraphs(sentences):
+
+def combined_paragraphs(sentences):
         print("combined_paragraphs\n")
         paragraphs = []
         for i in range(0, len(sentences), 2):
             paragraph = ' '.join(sentences[i:i+2])
             paragraphs.append(paragraph)
         return paragraphs
-            
     
-    def openai_question(input_prompt):
+def openai_question(input_prompt):
         #print("openai_question\n")
         template = """We particularly welcome the discussion around the possible inclusion of smart line voltage thermostats. Although currently less prevalent on the market, on the North American scale, electric heat is bound to increase in the future given the move to electrification and the energy transition.
                     make 4 questions and give answers bases on content of above paragraph. | Question: What is the focus of the discussion? Answer: The focus of the discussion is on the possible inclusion of smart line voltage thermostats. | Question: Why are smart line voltage thermostats currently less prevalent on the market? Answer: Smart line voltage thermostats are currently less prevalent on the market. | Question: What factor is expected to drive the increase in electric heat in the future? Answer: The move to electrification and the energy transition are expected to drive the increase in electric heat in the future. | Question: On which scale is electric heat bound to increase? Answer: Electric heat is bound to increase on the North American scale.
@@ -102,11 +74,8 @@ def function():
             print(f"An error occurred: {e}")
             
             return None
-            
-
-            
-    
-    def generate_jsonl(paragraphs):
+        
+def generate_jsonl(paragraphs):
         print("generate_jsonl\n")
         pattern = r"Question: (.*?) Answer: (.*?)$"
         
@@ -135,7 +104,35 @@ def function():
                 except:
                     continue
                 
-        return 'output.jsonl'    
+        return 'output.jsonl'  
+
+
+@app.route('/pdf',methods=['POST'])
+def function():
+    token = request.headers.get('Authorization')
+    
+    if token:
+        try:
+            # Verify and decode the token
+            decoded_token = jwt.decode(token, 'dulan/sahan', algorithms=['HS256'])
+            # Perform additional checks or operations based on the decoded token
+            # ...
+            #return 'Authorized'
+        except jwt.ExpiredSignatureError:
+            return 'Token expired', 401
+        except jwt.InvalidTokenError:
+            return 'Invalid token', 401
+    
+
+    #files = request.files.getlist('file')
+    files = []
+    for key, value in request.files.items():
+        if 'file' in key:
+            files.append(value)
+    openai.api_key = request.form['openai_key']
+    if len(files) == 0:
+        return 'No file uploaded', 400
+
     
     converted_text = convert_pdf_to_text(files)
     processed_text = preprocess_text(converted_text)
