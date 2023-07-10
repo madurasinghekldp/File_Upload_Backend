@@ -19,7 +19,7 @@ def function():
             decoded_token = jwt.decode(token, 'dulan/sahan', algorithms=['HS256'])
             # Perform additional checks or operations based on the decoded token
             # ...
-            return 'Authorized'
+            #return 'Authorized'
         except jwt.ExpiredSignatureError:
             return 'Token expired', 401
         except jwt.InvalidTokenError:
