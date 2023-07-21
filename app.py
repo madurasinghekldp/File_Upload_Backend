@@ -242,12 +242,12 @@ async def process_jsonl_file_async(combined_paras,email):
         except Exception as e:
             with app.app_context():
                 socketio.emit('task_update', f'Fine-Tune Failure: {str(e)}')
-                send_email(email, 'The Fine-tune task failed', 'Unfortunately your fine-tune task failed for some reason.')
+                send_email(email, 'The Fine-tune task failed', 'Unfortunately your fine-tune task failed: '+e)
     else:
         # Emit the message to the client asynchronously using socketio
         with app.app_context():
             socketio.emit('task_update', 'Fine-Tune Failure: Empty data')
-            send_email(email, 'The Fine-tune task failed', 'Unfortunately your fine-tune task failed for some reason.')
+            send_email(email, 'The Fine-tune task failed', 'Unfortunately your fine-tune task failed because empty data.')
             
 
 
