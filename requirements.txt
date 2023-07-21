@@ -4,4 +4,5 @@ PyJWT==2.7.0
 openai==0.27.8
 jsonlines==3.1.0
 asyncio==3.4.3
+flask-socketio==5.3.4
 gunicorn
