@@ -258,8 +258,8 @@ def run_async_task(combined_paras,email):
 
 def send_email(recipient, subject, body):
     # Replace the following placeholders with your email credentials and settings
-    sender_email = 'clagri2023@gmail.com'
-    sender_password = 'cqnbrmcxqznmzxxa'
+    sender_email = ''
+    sender_password = ''
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587  # Or the appropriate port for your email service
 
